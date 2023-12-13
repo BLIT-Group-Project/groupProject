@@ -1,5 +1,7 @@
 package user;
 
+import java.util.Random;
+
 public class User {
     private int userId;
     private String username;
@@ -7,6 +9,7 @@ public class User {
     private byte[] salt;
 
     public User(String username, String password, byte[] salt) {
+        this.userId = new Random().nextInt();
         this.username = username;
         this.password = password;
         this.salt = salt;
