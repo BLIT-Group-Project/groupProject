@@ -6,9 +6,9 @@ public class User {
     private int userId;
     private String username;
     private String password;
-    private byte[] salt;
+    private String salt;
 
-    public User(String username, String password, byte[] salt) {
+    public User(String username, String password, String salt) {
         this.userId = new Random().nextInt();
         this.username = username;
         this.password = password;
@@ -39,11 +39,11 @@ public class User {
         this.password = password;
     }
 
-    public byte[] getSalt() {
+    public String getSalt() {
         return salt;
     }
 
-    public void setSalt(byte[] salt) {
+    public void setSalt(String salt) {
         this.salt = salt;
     }
 }
