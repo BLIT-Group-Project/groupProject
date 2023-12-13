@@ -8,11 +8,12 @@ public class User {
     private String password;
     private String salt;
 
-    public User(String username, String password, String salt) {
+    public User(){}
+
+    public User(String username, String password) {
         this.userId = new Random().nextInt();
         this.username = username;
         this.password = password;
-        this.salt = salt;
     }
 
     public int getUserId() {
@@ -45,5 +46,13 @@ public class User {
 
     public void setSalt(String salt) {
         this.salt = salt;
+    }
+
+    @Override
+    public String toString() {
+        return "User{" +
+                "userId=" + userId +
+                ", username='" + username + '\'' +
+                '}';
     }
 }
