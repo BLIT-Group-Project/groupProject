@@ -5,6 +5,7 @@ import java.util.UUID;
 import account.constants.AccountType;
 
 public class Account {
+    // figure out how to make accountType final without causing exceptions
     private String accountId;
     private int userId;
     private double balance;
@@ -22,6 +23,13 @@ public class Account {
         this.userId = source.userId;
         this.balance = source.balance;
         this.accountType = source.accountType;
+    }
+
+    // for creating credit accounts where account type should be fixed
+    protected Account(int userId) {
+        this.accountId = UUID.randomUUID().toString();
+        this.userId = userId;
+        this.balance = 0.00;
     }
 
     public String getAccountId() {
@@ -44,9 +52,10 @@ public class Account {
         return accountType.toString();
     }
 
-    public void setAccountType(AccountType accountType) {
-        this.accountType = accountType;
-    }
+    // commented out since you should not be able to change account types
+    // public void setAccountType(AccountType accountType) {
+    //     this.accountType = accountType;
+    // }
 
     public double deposit(double amount) {
         return balance += amount;
