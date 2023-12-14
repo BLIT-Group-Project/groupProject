@@ -2,7 +2,6 @@ import user.User;
 import user.UserService;
 import user.UserServiceImpl;
 
-import java.util.Objects;
 import java.util.Scanner;
 
 public class Main {
@@ -39,6 +38,7 @@ public class Main {
                         user = userService.saveUser(new User(newUsername, newPassword));
                         break;
                     case 3:
+                        scanner.close();
                         System.out.println("EXITING SYSTEM, GOODBYE");
                         System.exit(0);
                 }
@@ -88,6 +88,7 @@ public class Main {
                         user = userService.logout();
                         break;
                     case 5:
+                        scanner.close();
                         System.out.println("EXITING SYSTEM, GOODBYE");
                         System.exit(0);
                 }
