@@ -59,7 +59,7 @@ public class CreditAccount extends Account{
     }
 
     protected TransactionResponse acceptOrDeclineCharge(double amount) {
-        if (creditLimit - getBalance() < amount) {
+        if (creditLimit - getBalance() > amount) {
             return TransactionResponse.ACCEPTED;
         } else {
             return TransactionResponse.DECLINED;
