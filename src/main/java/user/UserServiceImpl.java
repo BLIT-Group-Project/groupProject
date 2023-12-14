@@ -68,4 +68,38 @@ public class UserServiceImpl implements UserService{
             } else System.out.println("USER WITH ID " + userId + " DOESN'T EXIST");
         }
     }
+
+    @Override
+    public User login(String username, String password, User user) {
+        if (user != null | user != new User()) {
+            System.out.println("YOU ARE ALREADY LOGGED IN");
+            return user;
+        } else {
+            user = getUserByUsername(username);
+            if(PasswordEncoder.verifyPassword(password, user.getPassword(), user.getSalt())){
+                System.out.println("USER LOGGED IN SUCCESSFULLY!");
+                return user;
+            }
+            else {
+                System.out.println("LOGIN FAILED");
+                return new User();
+            }
+        }
+    }
+
+    @Override
+    public User logout() {
+        return new User();
+    }
+
+
+    private User getUserByUsername(String username) {
+        for (User user : userList) {
+            if(user.getUsername().equals(username)){
+                System.out.println(user);
+                return user;
+            }
+        }
+        return new User();
+    }
 }
