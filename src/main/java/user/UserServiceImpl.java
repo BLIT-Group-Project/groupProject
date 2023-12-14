@@ -13,23 +13,24 @@ public class UserServiceImpl implements UserService{
     }
 
     @Override
-    public void saveUser(User user) {
+    public User saveUser(User user) {
         if(userList.isEmpty()){
             user.setSalt(PasswordEncoder.generateSalt());
             user.setPassword(PasswordEncoder.hashPassword(user.getPassword(), user.getSalt()));
             userList.add(user);
-            return;
+            return user;
         }
 
         for (User u : userList) {
             if(u.getUsername().equals(user.getUsername())){
                 System.out.println("USERNAME ALREADY TAKEN, PLEASE CHOSE ANOTHER!");
-                return;
+                return new User();
             }
         }
         user.setSalt(PasswordEncoder.generateSalt());
         user.setPassword(PasswordEncoder.hashPassword(user.getPassword(), user.getSalt()));
         userList.add(user);
+        return user;
     }
 
     @Override
@@ -41,7 +42,6 @@ public class UserServiceImpl implements UserService{
 
         for (User u : userList) {
             if(u.getUserId() == userId){
-                u.setUsername(user.getUsername());
                 u.setPassword(PasswordEncoder.hashPassword(user.getPassword(), u.getSalt()));
             } else System.out.println("USER WITH ID " + userId + " DOESN'T EXIST");
         }
@@ -67,5 +67,39 @@ public class UserServiceImpl implements UserService{
                 return;
             } else System.out.println("USER WITH ID " + userId + " DOESN'T EXIST");
         }
+    }
+
+    @Override
+    public User login(String username, String password, User user) {
+        if (user == null | user == new User()) {
+            System.out.println("YOU ARE ALREADY LOGGED IN");
+            return user;
+        } else {
+            user = getUserByUsername(username);
+            if(PasswordEncoder.verifyPassword(password, user.getPassword(), user.getSalt())){
+                System.out.println("USER LOGGED IN SUCCESSFULLY!");
+                return user;
+            }
+            else {
+                System.out.println("LOGIN FAILED");
+                return new User();
+            }
+        }
+    }
+
+    @Override
+    public User logout() {
+        return new User();
+    }
+
+
+    private User getUserByUsername(String username) {
+        for (User user : userList) {
+            if(user.getUsername().equals(username)){
+                System.out.println(user);
+                return user;
+            }
+        }
+        return new User();
     }
 }
