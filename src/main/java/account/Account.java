@@ -5,17 +5,20 @@ import java.util.UUID;
 import account.constants.AccountType;
 
 public class Account {
-    // figure out how to make accountType final without causing exceptions
+    
+    // figure out how to add interest rates interest rates
     private String accountId;
     private int userId;
     private double balance;
-    private AccountType accountType;
+    private final AccountType accountType;
+    private double interestRate;
 
     public Account(int userId, AccountType accountType) {
         this.accountId = UUID.randomUUID().toString();
         this.userId = userId;
         this.balance = 0.00;
         this.accountType = accountType;
+        this.interestRate = setInterestRate(accountType);
     }
 
     public Account(Account source) {
@@ -23,6 +26,7 @@ public class Account {
         this.userId = source.userId;
         this.balance = source.balance;
         this.accountType = source.accountType;
+        this.interestRate = source.interestRate;
     }
 
     // for creating credit accounts where account type should be fixed
@@ -30,44 +34,55 @@ public class Account {
         this.accountId = UUID.randomUUID().toString();
         this.userId = userId;
         this.balance = 0.00;
+        this.accountType = AccountType.CREDIT;
+        this.interestRate = setInterestRate(accountType);
     }
 
-    public String getAccountId() {
+    protected String getAccountId() {
         return accountId;
     }
 
-    public int getUserId() {
+    protected int getUserId() {
         return userId;
     }
 
-    public void setUserId(int userId) {
+    protected void setUserId(int userId) {
         this.userId = userId;
     }
 
-    public double getBalance() {
+    protected double getBalance() {
         return balance;
     }
 
-    public String getAccountType() {
+    protected String getAccountType() {
         return accountType.toString();
     }
 
-    // commented out since you should not be able to change account types
-    // public void setAccountType(AccountType accountType) {
-    //     this.accountType = accountType;
-    // }
-
-    public double deposit(double amount) {
+    protected double deposit(double amount) {
         return balance += amount;
     }
 
-    public double withdraw(double amount) {
+    protected double withdraw(double amount) {
         if (balance >= amount) {
             return balance -= amount;
         } else {
             System.out.println("Insufficient Funds");
             return balance;
         }
+    }
+
+    protected double setInterestRate(AccountType accountType) {
+        if (accountType == AccountType.CHECKING) {
+            return 0.00;
+        } else if (accountType == AccountType.SAVINGS) {
+            return 0.05;
+        } else{
+            return .075;
+        }
+    }
+
+    protected double getInterestRate() {
+        return interestRate;
     }
 
     @Override

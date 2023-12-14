@@ -51,6 +51,17 @@ public class AccountRepository {
         accountMap.remove(getKeyFromValue(accountId));
     }
 
+    protected boolean existsByAccountId(String accountId) {
+        Optional<Account> findAccount = accountMap.values().stream()
+            .filter(a -> a.getAccountId().equals(accountId))
+            .findFirst();
+        if (findAccount.isPresent()) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
     // utility method to extract the corresponding Integer key from the accountID field
     private int getKeyFromValue(String accountId) {
         for (Entry<Integer, Account> entry : accountMap.entrySet()) {

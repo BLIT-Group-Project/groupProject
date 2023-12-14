@@ -1,5 +1,6 @@
 package account;
 
+import java.util.Calendar;
 import java.util.List;
 
 public interface AccountService {
@@ -9,5 +10,6 @@ public interface AccountService {
     Account createAccount(Account account);
     Account updateAccount(Account account);
     void deleteAccountById(String AccountId);
+    void applyInterest(Calendar cal, Account account);
     
 }
