@@ -9,7 +9,6 @@ import java.security.spec.KeySpec;
 import java.util.Base64;
 
 public class PasswordEncoder {
-    private static final SecureRandom random = new SecureRandom();
     private static final int ITERATIONS = 10000;
     private static final int KEY_LENGTH = 256;
 
