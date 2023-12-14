@@ -33,4 +33,24 @@ public class TakeInput {
             }
         }
     }
+
+    // For menu choice selection
+    public int menuChoice(Scanner scan, int max) {
+        int num;
+        while (true) {
+            if (scan.hasNextInt()) {
+                num = scan.nextInt();
+                scan.nextLine();
+                if (num < 1 || num > max) {
+                    System.out.println("Please enter a number between 1 and " + max + ": ");
+                    continue;
+                }
+                return num;
+            } else {
+                scan.nextLine();
+                System.out.println("Please enter a number: ");
+                continue;
+            }
+        }
+    }
 }
