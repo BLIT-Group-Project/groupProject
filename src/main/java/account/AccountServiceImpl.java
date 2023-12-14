@@ -12,6 +12,10 @@ public class AccountServiceImpl implements AccountService{
     
     private AccountRepository repo = new AccountRepository();
 
+    public AccountServiceImpl(AccountRepository repo) {
+        this.repo = repo;
+    }
+
     @Override
     public Account getAccountById(String accountId) {
         return violenlyShakeOptionalAccount(accountId);
