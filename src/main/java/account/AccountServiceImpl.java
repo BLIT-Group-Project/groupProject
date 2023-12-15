@@ -24,8 +24,8 @@ public class AccountServiceImpl implements AccountService{
 
     @Override
     public List<Account> getAllAccountsByUserId(int userId) {
-        if (!repo.getAllAccountsByUserId(userId).isEmpty() && repo.getAllAccountsByUserId(userId) != null) {
-            return repo.getAllAccountsByUserId(userId);
+        if (!repo.getAllByUserId(userId).isEmpty() && repo.getAllByUserId(userId) != null) {
+            return repo.getAllByUserId(userId);
         } else {
             throw new AccountNotFoundException();
         }
@@ -43,7 +43,7 @@ public class AccountServiceImpl implements AccountService{
     @Override
     public Account updateAccount(Account account) {
         if (repo.existsByAccountId(account.getAccountId())) {
-            return repo.updateAccount(account);
+            return repo.save(new Account(account));
         } else {
             throw new AccountNotFoundException();
         }
@@ -52,7 +52,7 @@ public class AccountServiceImpl implements AccountService{
     @Override
     public void deleteAccountById(int accountId) {
         if (repo.existsByAccountId(accountId)) {
-            repo.deleteAccountById(accountId);
+            repo.deleteById(accountId);
             System.out.println("Account deleted");
         } else {
             throw new AccountNotFoundException();
@@ -107,7 +107,6 @@ public class AccountServiceImpl implements AccountService{
     }
 
     // these *should* only work with credit accounts
-
     @Override 
     public double getMinimumPayment(CreditAccount account) {
         if (account instanceof CreditAccount) {
@@ -125,6 +124,7 @@ public class AccountServiceImpl implements AccountService{
             throw new AccountMismatchException("Make payment", account.getAccountType());
         }
     }
+
     @Override
     public double charge(CreditAccount account, double amount) {
         if (account instanceof CreditAccount) {
@@ -153,7 +153,7 @@ public class AccountServiceImpl implements AccountService{
 
     // you have to treat optionals like a christmas present from a practical joker, and shake it to see if anything is even in there before opening it
     private Account violenlyShakeOptionalAccount(int accountId) {
-        return repo.getAccountByAccountId(accountId)
+        return repo.getByAccountId(accountId)
             .orElseThrow(() -> new AccountNotFoundException());
     }
     
