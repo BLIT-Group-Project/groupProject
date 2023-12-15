@@ -3,6 +3,7 @@ package account;
 import java.util.Calendar;
 import java.util.List;
 
+import account.constants.TransactionResponse;
 import account.exceptions.AccountMismatchException;
 import account.exceptions.AccountNotFoundException;;
 
@@ -131,6 +132,11 @@ public class AccountServiceImpl implements AccountService{
         } else {
             throw new AccountMismatchException("Charge", account.getAccountType());
         }
+    }
+
+    @Override
+    public TransactionResponse getTransactionResponse(CreditAccount account, double amount) {
+        return account.acceptOrDeclineCharge(amount);
     }
 
     // look, I have NO IDEA how to really implement this

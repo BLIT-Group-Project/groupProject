@@ -3,6 +3,8 @@ package account;
 import java.util.Calendar;
 import java.util.List;
 
+import account.constants.TransactionResponse;
+
 public interface AccountService {
     
     // basic crud stuff
@@ -23,6 +25,7 @@ public interface AccountService {
     double getMinimumPayment(CreditAccount account);
     double makePayment(CreditAccount account, double amount);
     double charge(CreditAccount account, double amount);
+    TransactionResponse getTransactionResponse(CreditAccount account, double amount);
 
     // wishful thinking about implementing a method to add interest to accounts at a specified time:
     void applyInterest(Calendar cal, Account account);
