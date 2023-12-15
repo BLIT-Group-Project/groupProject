@@ -1,26 +1,28 @@
 package account;
 
-import java.util.UUID;
+import java.util.Random;
 
 import account.constants.AccountType;
+import account.exceptions.AccountMismatchException;
 
 public class Account {
     
     // figure out how to add interest rates interest rates
-    private String accountId;
-    private int userId;
+    private final int accountId;
+    private final int userId;
     private double balance;
     private final AccountType accountType;
     private double interestRate;
 
     public Account(int userId, AccountType accountType) {
-        this.accountId = UUID.randomUUID().toString();
+        this.accountId = new Random().nextInt();
         this.userId = userId;
         this.balance = 0.00;
-        this.accountType = accountType;
+        this.accountType = forceType(accountType);
         this.interestRate = setInterestRate(accountType);
     }
 
+    // copy constructor
     public Account(Account source) {
         this.accountId = source.accountId;
         this.userId = source.userId;
@@ -29,25 +31,30 @@ public class Account {
         this.interestRate = source.interestRate;
     }
 
-    // for creating credit accounts where account type should be fixed
+    // Only for the CreditAccount class to use as a super constructor
     protected Account(int userId) {
-        this.accountId = UUID.randomUUID().toString();
+        this.accountId = new Random().nextInt();
         this.userId = userId;
         this.balance = 0.00;
         this.accountType = AccountType.CREDIT;
         this.interestRate = setInterestRate(accountType);
     }
 
-    protected String getAccountId() {
+    // throw an error if the program attempts to create a credit account without using the CreditAccount constuctor
+    private AccountType forceType(AccountType accountType) {
+        if (!accountType.toString().toLowerCase().matches("checking|savings")) {
+            throw new AccountMismatchException();
+        } else {
+            return accountType;
+        }
+    }
+
+    protected int getAccountId() {
         return accountId;
     }
 
     protected int getUserId() {
         return userId;
-    }
-
-    protected void setUserId(int userId) {
-        this.userId = userId;
     }
 
     protected double getBalance() {
@@ -71,7 +78,7 @@ public class Account {
         }
     }
 
-    protected double setInterestRate(AccountType accountType) {
+    private double setInterestRate(AccountType accountType) {
         if (accountType == AccountType.CHECKING) {
             return 0.00;
         } else if (accountType == AccountType.SAVINGS) {

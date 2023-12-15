@@ -25,11 +25,11 @@ public class AccountRepository {
         return accountMap.get(counter-1);
     }
 
-    protected Optional<Account> getAccountByAccountId(String accountId) {
+    protected Optional<Account> getAccountByAccountId(int accountId) {
         return accountMap
             .values()
             .stream()
-            .filter(a -> a.getAccountId().equals(accountId))
+            .filter(a -> a.getAccountId() == accountId)
             .findFirst();
     }
 
@@ -42,18 +42,18 @@ public class AccountRepository {
     }
 
     protected Account updateAccount(Account updatedAccount) {
-        String accountId = updatedAccount.getAccountId();
+        int accountId = updatedAccount.getAccountId();
         accountMap.put(getKeyFromValue(accountId), updatedAccount);
         return new Account(accountMap.get(getKeyFromValue(accountId)));
     }
 
-    protected void deleteAccountById(String accountId) {
+    protected void deleteAccountById(int accountId) {
         accountMap.remove(getKeyFromValue(accountId));
     }
 
-    protected boolean existsByAccountId(String accountId) {
+    protected boolean existsByAccountId(int accountId) {
         Optional<Account> findAccount = accountMap.values().stream()
-            .filter(a -> a.getAccountId().equals(accountId))
+            .filter(a -> a.getAccountId() == accountId)
             .findFirst();
         if (findAccount.isPresent()) {
             return true;
@@ -63,9 +63,9 @@ public class AccountRepository {
     }
 
     // utility method to extract the corresponding Integer key from the accountID field
-    private int getKeyFromValue(String accountId) {
+    private int getKeyFromValue(int accountId) {
         for (Entry<Integer, Account> entry : accountMap.entrySet()) {
-            if (entry.getValue().getAccountId().equalsIgnoreCase(accountId)) {
+            if (entry.getValue().getAccountId() == accountId) {
                 return entry.getKey();
             } else {
                 throw new AccountNotFoundException();
