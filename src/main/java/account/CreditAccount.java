@@ -20,6 +20,13 @@ public class CreditAccount extends Account{
         this.creditLimit = source.creditLimit;
     }
 
+    // to catch attempts to use the account object to make a credit account
+    public CreditAccount(Account source) {
+        super(source);
+        this.minimumPayment = 0.00;
+        this.creditLimit = 1500.00;
+    }
+
     protected void setMinimumPayment(double balance) {
         if (balance < 500.00) {
             minimumPayment =  balance * .1;

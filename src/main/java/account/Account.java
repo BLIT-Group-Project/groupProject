@@ -3,7 +3,6 @@ package account;
 import java.util.Random;
 
 import account.constants.AccountType;
-import account.exceptions.AccountMismatchException;
 
 public class Account {
     
@@ -18,7 +17,7 @@ public class Account {
         this.accountId = new Random().nextInt();
         this.userId = userId;
         this.balance = 0.00;
-        this.accountType = forceType(accountType);
+        this.accountType = accountType;
         this.interestRate = setInterestRate(accountType);
     }
 
@@ -40,14 +39,15 @@ public class Account {
         this.interestRate = setInterestRate(accountType);
     }
 
+    // just in case it turns out we need this later (This should be addressed in the service layer by saving the account based on the account type field):
     // throw an error if the program attempts to create a credit account without using the CreditAccount constuctor
-    private AccountType forceType(AccountType accountType) {
-        if (!accountType.toString().toLowerCase().matches("checking|savings")) {
-            throw new AccountMismatchException();
-        } else {
-            return accountType;
-        }
-    }
+    // private AccountType forceType(AccountType accountType) {
+    //     if (!accountType.toString().matches("(?i)checking|savings")) {
+    //         throw new AccountMismatchException();
+    //     } else {
+    //         return accountType;
+    //     }
+    // }
 
     protected int getAccountId() {
         return accountId;

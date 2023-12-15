@@ -32,7 +32,11 @@ public class AccountServiceImpl implements AccountService{
 
     @Override
     public Account createAccount(Account account) {
-        return repo.save(account);
+        if (account.getAccountType().matches("(?i)savings|checking")) {
+            return repo.save(account);
+        } else {
+            return repo.save(new CreditAccount(account));
+        }
     }
 
     @Override
