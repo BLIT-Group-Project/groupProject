@@ -60,9 +60,12 @@ public class CreditAccount extends Account{
 
     // adjust the balance by making payments and charges:
     protected double makePayment(double amount) {
-        if (amount > minimumPayment) {
+        if (amount > minimumPayment && amount < getBalance()) {
             super.withdraw(amount);
             setMinimumPayment(getBalance());
+            return getBalance();
+        } else if (amount > getBalance()) {
+            System.out.println("You cannot overpay your balance of $" + String.format("%.2f", getBalance()));
             return getBalance();
         } else {
             System.out.println("Your payment is below you minimum payment of $" + String.format("%.2f", getMinimumPayment()));
@@ -88,6 +91,11 @@ public class CreditAccount extends Account{
             System.out.println(TransactionResponse.DECLINED);
             return getBalance();
         }
+    }
+
+    @Override
+    public String toString() {
+        return super.toString() + " Credit Limit: " + getCreditLimit() + " Minimum Payment: " + getMinimumPayment();
     }
     
 }

@@ -10,6 +10,7 @@ public interface AccountService {
     // basic crud stuff
     Account getAccountById(int accountId);
     List<Account> getAllAccountsByUserId(int userId);
+    List<Account> getAll();
     Account createAccount(Account account);
     Account updateAccount(Account account);
     void deleteAccountById(int AccountId);

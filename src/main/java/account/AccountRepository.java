@@ -34,6 +34,13 @@ public class AccountRepository {
             .toList();
     }
 
+    protected List<Account> getAll() {
+        return accountMap
+            .values()
+            .stream()
+            .toList();
+    }
+
     protected void deleteById(int accountId) {
         accountMap.remove(accountId);
     }

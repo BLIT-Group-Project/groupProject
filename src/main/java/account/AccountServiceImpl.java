@@ -32,6 +32,15 @@ public class AccountServiceImpl implements AccountService{
     }
 
     @Override
+    public List<Account> getAll() {
+        if (!repo.getAll().isEmpty() && repo.getAll() != null) {
+            return repo.getAll();
+        } else {
+            throw new AccountNotFoundException();
+        }
+    }
+
+    @Override
     public Account createAccount(Account account) {
         if (account.getAccountType().matches("(?i)savings|checking")) {
             return repo.save(account);
