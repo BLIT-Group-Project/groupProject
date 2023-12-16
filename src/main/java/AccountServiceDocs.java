@@ -63,7 +63,7 @@ public class AccountServiceDocs {
         System.out.println(accountService.charge(testAccount6, 450.75));
         System.out.println(accountService.makePayment(testAccount6, 300.00));
 
-        // update the account in order to save all deposits, charges, withdrawals, and patments
+        // update the account in order to save all deposits, charges, withdrawals, and payments
         accountService.updateAccount(testSavingsAccount);
         accountService.updateAccount(testCheckingAccount);
         accountService.updateAccount(testCreditAccount);
@@ -78,7 +78,7 @@ public class AccountServiceDocs {
         List<Account> accountList2 = accountService.getAll();
         System.out.println(accountList2.toString());
 
-        // Except for deleteById and applyInterest, all public methods in the service layer return data for your API to use.
+        // Except for deleteById and applyInterest, all public methods in the service layer return data for your API to consume.
 
         // look at account/AccountService.java for the list of public methods, their return types and parameters, and thank you for coming to my TED Talk.
 
