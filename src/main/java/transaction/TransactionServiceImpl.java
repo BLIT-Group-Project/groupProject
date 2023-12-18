@@ -21,8 +21,9 @@ public class TransactionServiceImpl implements TransactionServices {
 
     @Override
     public void updateTransaction(Transaction transaction) {
-        transaction.setAmount(transaction.getAmount());
-        transaction.setTimeStamp(transaction.getTimeStamp());
+        Transaction savedTransaction=findTransactionById(transaction.getTransactionId());
+        savedTransaction.setAmount(transaction.getAmount());
+        savedTransaction.setTimeStamp(transaction.getTimeStamp());
 
 
 
@@ -38,7 +39,6 @@ public class TransactionServiceImpl implements TransactionServices {
         for (Transaction transaction : transactionDb) {
             if (transaction.getTransactionId() == transactionId) {
                 transactionToRemove = transaction;
-                break;
             }
             if (transactionToRemove != null) {
                 transactionDb.remove(transactionToRemove);
@@ -58,5 +58,17 @@ public class TransactionServiceImpl implements TransactionServices {
             }
 
     }
+
+    @Override
+    public Transaction findTransactionById(int id) {
+        for (Transaction transaction : transactionDb) {
+            if(transaction.getTransactionId()==id){
+                return transaction;
+            }
+
+        }
+        return null;
+    }
+
 
 }

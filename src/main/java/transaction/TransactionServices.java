@@ -6,6 +6,7 @@ public interface TransactionServices {
     void updateTransaction(Transaction transaction);
     void deleteTransaction(int transactionId);
     void displayTransaction();
+    Transaction findTransactionById(int id);
 
 
 }
