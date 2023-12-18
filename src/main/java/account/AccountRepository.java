@@ -46,10 +46,6 @@ public class AccountRepository {
     }
 
     protected boolean existsByAccountId(int accountId) {
-        if (accountMap.containsKey(accountId)) {
-            return true;
-        } else {
-            return false;
-        }
+         return accountMap.containsKey(accountId);
     }
 }
