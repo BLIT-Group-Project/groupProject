@@ -6,7 +6,6 @@ import account.constants.AccountType;
 
 public class Account {
     
-    // figure out how to add interest rates interest rates
     private final int accountId;
     private final int userId;
     private double balance;
@@ -38,16 +37,6 @@ public class Account {
         this.accountType = AccountType.CREDIT;
         this.interestRate = setInterestRate(accountType);
     }
-
-    // just in case it turns out we need this later (This should be addressed in the service layer by saving the account based on the account type field):
-    // throw an error if the program attempts to create a credit account without using the CreditAccount constuctor
-    // private AccountType forceType(AccountType accountType) {
-    //     if (!accountType.toString().matches("(?i)checking|savings")) {
-    //         throw new AccountMismatchException();
-    //     } else {
-    //         return accountType;
-    //     }
-    // }
 
     protected int getAccountId() {
         return accountId;
@@ -95,6 +84,34 @@ public class Account {
     @Override
     public String toString() {
         return "Account ID: " + getAccountId() + ", account type: " + getAccountType() + ", balance: " + getBalance();
+    }
+
+    @Override
+    public int hashCode() {
+        final int prime = 31;
+        int result = 1;
+        result = prime * result + accountId;
+        result = prime * result + userId;
+        result = prime * result + ((accountType == null) ? 0 : accountType.hashCode());
+        return result;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj)
+            return true;
+        if (obj == null)
+            return false;
+        if (getClass() != obj.getClass())
+            return false;
+        Account other = (Account) obj;
+        if (accountId != other.accountId)
+            return false;
+        if (userId != other.userId)
+            return false;
+        if (accountType != other.accountType)
+            return false;
+        return true;
     }
 
 }

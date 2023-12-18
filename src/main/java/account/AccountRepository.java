@@ -52,17 +52,4 @@ public class AccountRepository {
             return false;
         }
     }
-
-    // utility method to extract the corresponding Integer key from the accountID field
-    // made some changes so this isn't used currently, but saving in case I change my mind
-    // private int getKeyFromValue(int accountId) {
-    //     for (Entry<Integer, Account> entry : accountMap.entrySet()) {
-    //         if (entry.getValue().getAccountId() == accountId) {
-    //             return entry.getKey();
-    //         } else {
-    //             throw new AccountNotFoundException();
-    //         }
-    //     }
-    //     return -1;
-    // }
 }
