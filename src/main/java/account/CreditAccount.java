@@ -1,6 +1,6 @@
 package account;
 
-import account.constants.TransactionResponse;
+import transaction.constants.TransactionResponse;
 
 public class CreditAccount extends Account{
 

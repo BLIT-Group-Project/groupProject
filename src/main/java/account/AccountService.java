@@ -3,7 +3,7 @@ package account;
 import java.util.Calendar;
 import java.util.List;
 
-import account.constants.TransactionResponse;
+import transaction.constants.TransactionResponse;
 
 public interface AccountService {
     

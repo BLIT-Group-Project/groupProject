@@ -3,9 +3,9 @@ package account;
 import java.util.Calendar;
 import java.util.List;
 
-import account.constants.TransactionResponse;
 import account.exceptions.AccountMismatchException;
-import account.exceptions.AccountNotFoundException;;
+import account.exceptions.AccountNotFoundException;
+import transaction.constants.TransactionResponse;;
 
 public class AccountServiceImpl implements AccountService{
     
