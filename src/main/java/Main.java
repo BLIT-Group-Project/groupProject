@@ -1,7 +1,9 @@
+import database.DatabaseConnection;
 import user.User;
 import user.UserService;
 import user.UserServiceImpl;
 
+import java.sql.SQLException;
 import java.util.Scanner;
 
 public class Main {
@@ -10,6 +12,16 @@ public class Main {
         UserService userService = new UserServiceImpl();
         Scanner scanner = new Scanner(System.in);
         int input;
+        try {
+            if(DatabaseConnection.getConnection().isValid(30)){
+                System.out.println("DATABASE CONNECTED");
+            }
+
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+            e.printStackTrace();
+        }
+
         while (true) {
             if(user.getUsername() == null){
                 System.out.println("""
@@ -56,7 +68,7 @@ public class Main {
                 switch (input) {
                     case 1:
                         scanner.nextLine();
-                        userService.getUserById(user.getUserId());
+                        System.out.println(userService.getUserById(user.getUserId()));
                         break;
                     case 2:
                         scanner.nextLine();

@@ -11,7 +11,6 @@ public class User {
     public User(){}
 
     public User(String username, String password) {
-        this.userId = new Random().nextInt();
         this.username = username;
         this.password = password;
     }
@@ -52,7 +51,8 @@ public class User {
     public String toString() {
         return "User{" +
                 "userId=" + userId +
-                ", username='" + username + '\'' +
+                ", username=" + username + '\'' +
+                ", password=" + password +
                 '}';
     }
 }
