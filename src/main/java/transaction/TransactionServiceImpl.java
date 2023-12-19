@@ -48,17 +48,17 @@ public class TransactionServiceImpl implements TransactionServices {
     }
 
     @Override
-    public void displayTransaction() {
+    public void displayTransaction(int accountId) {
         if(transactionDb.isEmpty()){
             System.out.println("No transaction to display ");
         }else
             for (Transaction transaction : transactionDb) {
-                System.out.println(transaction);
+                if(transaction.getFromAccountId()==accountId || transaction.getToAccountId()== accountId){
+                System.out.println(transaction);}
 
             }
 
     }
-
     @Override
     public Transaction findTransactionById(int id) {
         for (Transaction transaction : transactionDb) {
@@ -69,6 +69,7 @@ public class TransactionServiceImpl implements TransactionServices {
         }
         return null;
     }
+    
 
 
 }
