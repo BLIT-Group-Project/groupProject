@@ -68,7 +68,7 @@ public class Main {
                 switch (input) {
                     case 1:
                         scanner.nextLine();
-                        userService.getUserById(user.getUserId());
+                        System.out.println(userService.getUserById(user.getUserId()));
                         break;
                     case 2:
                         scanner.nextLine();
