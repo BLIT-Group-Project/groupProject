@@ -1,7 +1,7 @@
 package account.constants;
 
 public enum TransactionResponse {
-    ACCEPTED("Accepted"), DECLINED("Declined");
+    ACCEPTED("Accepted"), DECLINED("Declined"), PENDING("Pending");
 
     private String value;
 
