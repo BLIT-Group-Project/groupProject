@@ -1,4 +1,4 @@
-package account.constants;
+package transaction.constants;
 
 public enum TransactionResponse {
     ACCEPTED("Accepted"), DECLINED("Declined"), PENDING("Pending");
