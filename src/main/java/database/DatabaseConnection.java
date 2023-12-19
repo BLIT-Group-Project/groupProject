@@ -13,7 +13,7 @@ public class DatabaseConnection implements AutoCloseable{
     static {
         try {
             connection = DriverManager.getConnection(
-                    "jdbc:mysql://localhost:3306/console_bank_system",
+                    "jdbc:mysql://localhost:3306/binary_bank_system",
                     Config.getDatabaseUser(),
                     Config.getDatabasePassword());
         } catch (SQLException e) {
