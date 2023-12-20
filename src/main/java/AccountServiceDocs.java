@@ -8,9 +8,7 @@ import account.constants.AccountType;
 
 public class AccountServiceDocs {
     public static void main(String[] args) {
-        // right now the service requires dependency injection of the repository to work
-        // when we do Spring boot this will work slightly differently because the framework will handle part of this.
-        
+        // create account service, with right now creates its own connection:
         AccountService accountService = new AccountServiceImpl();
 
         // there are public constructors:
