@@ -1,7 +1,5 @@
 package account;
 
-import java.util.Random;
-
 import account.constants.AccountType;
 
 public class Account {
@@ -13,7 +11,7 @@ public class Account {
     private double interestRate;
 
     public Account(int userId, AccountType accountType) {
-        this.accountId = new Random().nextInt();
+        this.accountId = 0;
         this.userId = userId;
         this.balance = 0.00;
         this.accountType = accountType;
@@ -31,7 +29,7 @@ public class Account {
 
     // Only for the CreditAccount class to use as a super constructor
     protected Account(int userId) {
-        this.accountId = new Random().nextInt();
+        this.accountId = 0;
         this.userId = userId;
         this.balance = 0.00;
         this.accountType = AccountType.CREDIT;
