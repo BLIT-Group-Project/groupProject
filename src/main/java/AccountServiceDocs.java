@@ -1,7 +1,6 @@
 import java.util.List;
 
 import account.Account;
-import account.AccountRepository;
 import account.AccountService;
 import account.AccountServiceImpl;
 import account.CreditAccount;
@@ -9,13 +8,8 @@ import account.constants.AccountType;
 
 public class AccountServiceDocs {
     public static void main(String[] args) {
-        // right now the service requires dependency injection of the repository to work
-        // when we do Spring boot this will work slightly differently because the framework will handle part of this.
-        // start by making a new AccountRepository object:
-        AccountRepository accountRepo = new AccountRepository();
-
-        // then make a new AccountService object passing the repository as an argument:
-        AccountService accountService = new AccountServiceImpl(accountRepo);
+        // create account service, with right now creates its own connection:
+        AccountService accountService = new AccountServiceImpl();
 
         // there are public constructors:
         Account testAccount1 = new Account(12345, AccountType.SAVINGS);
@@ -34,6 +28,8 @@ public class AccountServiceDocs {
         // or:
         Account testCheckingAccount = new Account(2984239, AccountType.CHECKING);
         accountService.createAccount(testCheckingAccount);
+        // you'll have to grab the account back out of the database before working with it:
+        testCheckingAccount = new Account(accountService.getAccountById(2));
 
         // the service will automatically correctly save credit accounts too:
         CreditAccount testCreditAccount = new CreditAccount(accountService.createAccount(new Account(2984239, AccountType.CREDIT)));
@@ -58,17 +54,17 @@ public class AccountServiceDocs {
 
         // remember this account I made further up in the page?
         CreditAccount testAccount6 = new CreditAccount(accountService.createAccount(testAccount5));
-        System.out.println(testAccount5.toString());
+        System.out.println(testAccount6.toString());
         // the createAccount method will correctly make it into an actual credit account with the proper functionality:
         System.out.println(accountService.charge(testAccount6, 450.75));
         System.out.println(accountService.makePayment(testAccount6, 300.00));
 
-        // update the account in order to save all deposits, charges, withdrawals, and payments
+        // // update the account in order to save all deposits, charges, withdrawals, and payments
         accountService.updateAccount(testSavingsAccount);
         accountService.updateAccount(testCheckingAccount);
         accountService.updateAccount(testCreditAccount);
         accountService.updateAccount(testAccount6);
-        // there's some casting magic that makes this work, and I hope it doesn't all break when we move this to an actual database.
+        // // there's some casting magic that makes this work, and I hope it doesn't all break when we move this to an actual database.
 
         // you can get a list of accounts owned by any given userId:
         List<Account> accountList = accountService.getAllAccountsByUserId(2984239);

@@ -37,6 +37,15 @@ public class Account {
         this.accountType = AccountType.CREDIT;
         this.interestRate = setInterestRate(accountType);
     }
+    
+    // Only to get objects out of the database without things getting really weird
+    protected Account(int accountId, int userId, AccountType accountType, double balance) {
+        this.accountId = accountId;
+        this.userId = userId;
+        this.balance = balance;
+        this.accountType = accountType;
+        this.interestRate = setInterestRate(accountType);
+    }
 
     protected int getAccountId() {
         return accountId;

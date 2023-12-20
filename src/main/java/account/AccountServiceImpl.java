@@ -3,18 +3,13 @@ package account;
 import java.util.Calendar;
 import java.util.List;
 
+import transaction.constants.TransactionResponse;
 import account.exceptions.AccountMismatchException;
-import account.exceptions.AccountNotFoundException;
-import transaction.constants.TransactionResponse;;
+import account.exceptions.AccountNotFoundException;;
 
 public class AccountServiceImpl implements AccountService{
     
     private AccountRepository repo = new AccountRepository();
-
-    // dependency injection to be removed when this grows up and becomes a real application
-    public AccountServiceImpl(AccountRepository repo) {
-        this.repo = repo;
-    }
 
     //crud stuff:
     @Override
@@ -49,10 +44,11 @@ public class AccountServiceImpl implements AccountService{
         }
     }
 
+    // FIX THIS
     @Override
     public Account updateAccount(Account account) {
         if (repo.existsByAccountId(account.getAccountId())) {
-            return repo.save(new Account(account));
+            return repo.update(new Account(account));
         } else {
             throw new AccountNotFoundException();
         }

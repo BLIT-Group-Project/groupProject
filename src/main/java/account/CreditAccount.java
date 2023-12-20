@@ -60,7 +60,7 @@ public class CreditAccount extends Account{
 
     // adjust the balance by making payments and charges:
     protected double makePayment(double amount) {
-        if (amount > minimumPayment && amount < getBalance()) {
+        if (amount >= minimumPayment && amount <= getBalance()) {
             super.withdraw(amount);
             setMinimumPayment(getBalance());
             return getBalance();
