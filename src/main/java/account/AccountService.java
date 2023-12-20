@@ -23,6 +23,7 @@ public interface AccountService {
     double getInterestRate(Account account);
     double deposit(Account account, double amount);
     double withdraw(Account account, double amount);
+    double getCreditLimit(CreditAccount account);
     double getMinimumPayment(CreditAccount account);
     double makePayment(CreditAccount account, double amount);
     double charge(CreditAccount account, double amount);
