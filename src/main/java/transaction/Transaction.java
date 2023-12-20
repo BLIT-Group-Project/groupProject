@@ -1,6 +1,9 @@
 package transaction;
 
 
+import transaction.constants.TransactionResponse;
+import transaction.constants.TransactionType;
+
 import java.time.LocalDateTime;
 
 public class Transaction {
@@ -9,6 +12,24 @@ public class Transaction {
     private int toAccountId;
     private double amount;
     private LocalDateTime timeStamp;
+    private TransactionResponse status;
+    private TransactionType transactionType;
+
+    public TransactionResponse getStatus() {
+        return status;
+    }
+
+    public void setStatus(TransactionResponse status) {
+        this.status = status;
+    }
+
+    public TransactionType getTransactionType() {
+        return transactionType;
+    }
+
+    public void setTransactionType(TransactionType transactionType) {
+        this.transactionType = transactionType;
+    }
 
     public Transaction(LocalDateTime timeStamp) {
         this.timeStamp = timeStamp;
@@ -58,14 +79,13 @@ public class Transaction {
         this.amount = amount;
     }
 
-    public Transaction(int transactionId, int fromAccountId, int toAccountId, double amount) {
+    public Transaction(int transactionId, int fromAccountId, int toAccountId, double amount, TransactionType transactionType) {
         this.transactionId = transactionId;
         this.fromAccountId = fromAccountId;
         this.toAccountId = toAccountId;
         this.amount = amount;
-
-
-
+        this.status = TransactionResponse.PENDING;
+        this.transactionType = transactionType;
     }
 
     @Override

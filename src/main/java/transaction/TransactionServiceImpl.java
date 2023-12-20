@@ -1,75 +1,68 @@
 package transaction;
 
+import account.Account;
+import account.AccountRepository;
+import account.AccountService;
+import account.AccountServiceImpl;
+import transaction.constants.TransactionResponse;
+import transaction.constants.TransactionType;
+import user.UserRepository;
+import user.UserRepositoryImpl;
+
 import java.util.ArrayList;
 import java.util.List;
 
 public class TransactionServiceImpl implements TransactionServices {
-
-    private static List<Transaction> transactionDb;
+    private final TransactionRepository transactionRepository;
+    private final AccountService accountService;
 
     public TransactionServiceImpl() {
-        this.transactionDb = new ArrayList<>();
+        this.transactionRepository = new TransactionRepositoryImpl();
+        this.accountService = new AccountServiceImpl();
     }
 
 
     @Override
     public void createTransaction(Transaction transaction) {
-        transactionDb.add(transaction);
-
-
+        int tId = transactionRepository.insertTransaction(transaction);
+        try{
+            Thread.sleep(5 * 60 * 1000);
+        }
+        catch (InterruptedException e) {
+            System.out.println(e.getMessage());
+            e.printStackTrace();
+        }
+        updateTransaction(tId);
     }
 
     @Override
-    public void updateTransaction(Transaction transaction) {
-        Transaction savedTransaction=findTransactionById(transaction.getTransactionId());
-        savedTransaction.setAmount(transaction.getAmount());
-        savedTransaction.setTimeStamp(transaction.getTimeStamp());
-
-
-
-    }
-//        transaction.setTransactionId(transaction.getFromAccountId());
-//        transaction.setTimeStamp(transaction.getTimeStamp());
-
-
-
-    @Override
-    public void deleteTransaction(int transactionId) {
-        Transaction transactionToRemove = null;
-        for (Transaction transaction : transactionDb) {
-            if (transaction.getTransactionId() == transactionId) {
-                transactionToRemove = transaction;
-            }
-            if (transactionToRemove != null) {
-                transactionDb.remove(transactionToRemove);
-            }
-
+    public void updateTransaction(int transactionId) {
+        Transaction savedTransaction=findTransactionById(transactionId);
+        Account fromAccount = accountService.getAccountById(savedTransaction.getFromAccountId());
+        Account toAccount = accountService.getAccountById(savedTransaction.getToAccountId());
+        if(accountService.getBalance(fromAccount) >= savedTransaction.getAmount() &&
+                savedTransaction.getTransactionType() == TransactionType.WITHDRAW) {
+            accountService.withdraw(fromAccount, savedTransaction.getAmount());
+            accountService.deposit(toAccount, savedTransaction.getAmount());
+            savedTransaction.setStatus(TransactionResponse.ACCEPTED);
+            transactionRepository.updateTransaction(savedTransaction);
+            return;
+        } else {
+            savedTransaction.setStatus(TransactionResponse.DECLINED);
+            transactionRepository.updateTransaction(savedTransaction);
+            return;
         }
     }
 
     @Override
     public void displayTransaction(int accountId) {
-        if(transactionDb.isEmpty()){
-            System.out.println("No transaction to display ");
-        }else
-            for (Transaction transaction : transactionDb) {
-                if(transaction.getFromAccountId()==accountId || transaction.getToAccountId()== accountId){
-                System.out.println(transaction);}
-
-            }
-
+        List<Transaction> transactions = transactionRepository.getTransactionsByAccountId(accountId);
+        for (Transaction transaction : transactions) {
+            System.out.println(transaction);
+        }
     }
     @Override
     public Transaction findTransactionById(int id) {
-        for (Transaction transaction : transactionDb) {
-            if(transaction.getTransactionId()==id){
-                return transaction;
-            }
-
-        }
-        return null;
+        return transactionRepository.getTransactionById(id);
     }
-    
-
-
 }
