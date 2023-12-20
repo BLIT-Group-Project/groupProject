@@ -44,7 +44,6 @@ public class AccountServiceImpl implements AccountService{
         }
     }
 
-    // FIX THIS
     @Override
     public Account updateAccount(Account account) {
         if (repo.existsByAccountId(account.getAccountId())) {
@@ -112,6 +111,11 @@ public class AccountServiceImpl implements AccountService{
     }
 
     // these *should* only work with credit accounts
+    @Override
+    public double getCreditLimit(CreditAccount account) {
+        return account.getCreditLimit();
+    }
+
     @Override 
     public double getMinimumPayment(CreditAccount account) {
         if (account instanceof CreditAccount) {
