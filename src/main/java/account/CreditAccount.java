@@ -82,14 +82,15 @@ public class CreditAccount extends Account{
         }
     }
 
-    protected double charge(double amount) {
-        if (acceptOrDeclineCharge(amount).equals(TransactionResponse.ACCEPTED)) {
+    protected CreditTransaction charge(double amount) {
+        if (creditLimit - getBalance() > amount) {
             System.out.println(TransactionResponse.ACCEPTED);
+            super.deposit(amount);
             setMinimumPayment(getBalance() + amount);
-            return super.deposit(amount);
+            return new CreditTransaction(TransactionResponse.ACCEPTED, getBalance());
         } else {
             System.out.println(TransactionResponse.DECLINED);
-            return getBalance();
+            return new CreditTransaction(TransactionResponse.DECLINED, getBalance());
         }
     }
 

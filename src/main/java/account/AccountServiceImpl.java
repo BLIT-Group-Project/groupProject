@@ -135,7 +135,7 @@ public class AccountServiceImpl implements AccountService{
     }
 
     @Override
-    public double charge(CreditAccount account, double amount) {
+    public CreditTransaction charge(CreditAccount account, double amount) {
         if (account instanceof CreditAccount) {
             return account.charge(amount);
         } else {

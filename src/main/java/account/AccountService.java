@@ -26,7 +26,7 @@ public interface AccountService {
     double getCreditLimit(CreditAccount account);
     double getMinimumPayment(CreditAccount account);
     double makePayment(CreditAccount account, double amount);
-    double charge(CreditAccount account, double amount);
+    CreditTransaction charge(CreditAccount account, double amount);
     TransactionResponse getTransactionResponse(CreditAccount account, double amount);
 
     // wishful thinking about implementing a method to add interest to accounts at a specified time:
