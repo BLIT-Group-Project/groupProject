@@ -96,6 +96,8 @@ public class Transaction {
                 ", toAccountId=" + toAccountId +
                 ", amount=" + amount +
                 ", timeStamp=" + timeStamp +
+                ", status=" + status +
+                ", transactionType=" + transactionType +
                 '}';
     }
 }

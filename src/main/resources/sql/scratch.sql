@@ -31,3 +31,6 @@ CREATE TABLE transactions (
     FOREIGN KEY(from_id) REFERENCES accounts(account_id),
     FOREIGN KEY(to_id) REFERENCES accounts(account_id)
 );
+
+ALTER TABLE transactions MODIFY COLUMN from_id INT NULL;
+ALTER TABLE transactions DROP FOREIGN KEY transactions_ibfk_1;

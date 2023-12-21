@@ -1,9 +1,7 @@
 package transaction;
 
-import account.Account;
-import account.AccountRepository;
-import account.AccountService;
-import account.AccountServiceImpl;
+import account.*;
+import account.constants.AccountType;
 import transaction.constants.TransactionResponse;
 import transaction.constants.TransactionType;
 import user.UserRepository;
@@ -11,6 +9,7 @@ import user.UserRepositoryImpl;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 public class TransactionServiceImpl implements TransactionServices {
     private final TransactionRepository transactionRepository;
@@ -25,32 +24,69 @@ public class TransactionServiceImpl implements TransactionServices {
     @Override
     public void createTransaction(Transaction transaction) {
         int tId = transactionRepository.insertTransaction(transaction);
-        try{
-            Thread.sleep(5 * 60 * 1000);
-        }
-        catch (InterruptedException e) {
-            System.out.println(e.getMessage());
-            e.printStackTrace();
-        }
-        updateTransaction(tId);
+        Thread transactionProcessing = new Thread(() -> {
+            try{
+                Thread.sleep(1 * 60 * 1000);
+            }
+            catch (InterruptedException e) {
+                System.out.println(e.getMessage());
+                e.printStackTrace();
+            }
+            updateTransaction(tId);
+        });
+        transactionProcessing.setDaemon(true);
+        transactionProcessing.start();
     }
 
     @Override
     public void updateTransaction(int transactionId) {
         Transaction savedTransaction=findTransactionById(transactionId);
-        Account fromAccount = accountService.getAccountById(savedTransaction.getFromAccountId());
         Account toAccount = accountService.getAccountById(savedTransaction.getToAccountId());
-        if(accountService.getBalance(fromAccount) >= savedTransaction.getAmount() &&
-                savedTransaction.getTransactionType() == TransactionType.WITHDRAW) {
-            accountService.withdraw(fromAccount, savedTransaction.getAmount());
+        if(savedTransaction.getFromAccountId() != 0){
+            Account fromAccount = accountService.getAccountById(savedTransaction.getFromAccountId());
+            if(accountService.getBalance(fromAccount) >= savedTransaction.getAmount() &&
+                    savedTransaction.getTransactionType().toString().equalsIgnoreCase(TransactionType.WITHDRAW.toString())) {
+                accountService.withdraw(fromAccount, savedTransaction.getAmount());
+                accountService.deposit(toAccount, savedTransaction.getAmount());
+                accountService.updateAccount(fromAccount);
+                accountService.updateAccount(toAccount);
+                savedTransaction.setStatus(TransactionResponse.ACCEPTED);
+                transactionRepository.updateTransaction(savedTransaction);
+                return;
+            }
+            if (accountService.getBalance(fromAccount) <= savedTransaction.getAmount() &&
+                    savedTransaction.getTransactionType().toString().equalsIgnoreCase(TransactionType.WITHDRAW.toString())){
+                savedTransaction.setStatus(TransactionResponse.DECLINED);
+                transactionRepository.updateTransaction(savedTransaction);
+                return;
+            }
+        }
+        if(savedTransaction.getTransactionType().toString().equalsIgnoreCase(TransactionType.DEPOSIT.toString())) {
             accountService.deposit(toAccount, savedTransaction.getAmount());
+            accountService.updateAccount(toAccount);
             savedTransaction.setStatus(TransactionResponse.ACCEPTED);
             transactionRepository.updateTransaction(savedTransaction);
             return;
-        } else {
+        }
+        if(accountService.getBalance(toAccount) + savedTransaction.getAmount() >= 1500
+                && savedTransaction.getTransactionType().toString().equalsIgnoreCase(TransactionType.CHARGE.toString())) {
             savedTransaction.setStatus(TransactionResponse.DECLINED);
             transactionRepository.updateTransaction(savedTransaction);
             return;
+        }
+        if(accountService.getBalance(toAccount) + savedTransaction.getAmount() <= 1500
+                && savedTransaction.getTransactionType().toString().equalsIgnoreCase(TransactionType.CHARGE.toString())) {
+            accountService.charge((CreditAccount) toAccount, savedTransaction.getAmount());
+            accountService.updateAccount(toAccount);
+            savedTransaction.setStatus(TransactionResponse.ACCEPTED);
+            transactionRepository.updateTransaction(savedTransaction);
+            return;
+        }
+        if(savedTransaction.getTransactionType().toString().equalsIgnoreCase(TransactionType.MAKE_PAYMENT.toString())) {
+            accountService.makePayment((CreditAccount) toAccount, savedTransaction.getAmount());
+            accountService.updateAccount(toAccount);
+            savedTransaction.setStatus(TransactionResponse.ACCEPTED);
+            transactionRepository.updateTransaction(savedTransaction);
         }
     }
 

@@ -28,7 +28,11 @@ public class TransactionRepositoryImpl implements TransactionRepository{
 
             if(row > 0) {
                 System.out.println("TRANSACTION INSERTED SUCCESSFULLY");
-                return row;
+                try(ResultSet res = statement.getGeneratedKeys()){
+                    while (res.next()){
+                        return (int) res.getInt(1);
+                    }
+                }
             } else {
                 System.out.println("TRANSACTION INSERTION FAILED");
                 return row;
@@ -46,7 +50,7 @@ public class TransactionRepositoryImpl implements TransactionRepository{
         List<Transaction> transactionList = new ArrayList<>();
         try (PreparedStatement statement = DatabaseConnection
                 .getConnection()
-                .prepareStatement("SELECT * FROM transactions WHERE from_id = ? AND to_id = ?")) {
+                .prepareStatement("SELECT * FROM transactions WHERE from_id = ? OR to_id = ?")) {
             statement.setInt(1, accountId);
             statement.setInt(2, accountId);
             try(ResultSet res = statement.executeQuery()){
@@ -57,8 +61,8 @@ public class TransactionRepositoryImpl implements TransactionRepository{
                     transaction.setToAccountId(res.getInt("to_id"));
                     transaction.setAmount(res.getDouble("amount"));
                     transaction.setTimeStamp(res.getTimestamp("_timestamp").toLocalDateTime());
-                    transaction.setTransactionType(TransactionType.valueOf(res.getString("transaction_type")));
-                    transaction.setStatus(TransactionResponse.valueOf(res.getString("transaction_status")));
+                    transaction.setTransactionType(TransactionType.valueOf(res.getString("transaction_type").toUpperCase()));
+                    transaction.setStatus(TransactionResponse.valueOf(res.getString("transaction_status").toUpperCase()));
                     transactionList.add(transaction);
                 }
             }
@@ -83,8 +87,8 @@ public class TransactionRepositoryImpl implements TransactionRepository{
                     transaction.setToAccountId(res.getInt("to_id"));
                     transaction.setAmount(res.getDouble("amount"));
                     transaction.setTimeStamp(res.getTimestamp("_timestamp").toLocalDateTime());
-                    transaction.setTransactionType(TransactionType.valueOf(res.getString("transaction_type")));
-                    transaction.setStatus(TransactionResponse.valueOf(res.getString("transaction_status")));
+                    transaction.setTransactionType(TransactionType.valueOf(res.getString("transaction_type").toUpperCase()));
+                    transaction.setStatus(TransactionResponse.valueOf(res.getString("transaction_status").toUpperCase()));
                 }
             }
         } catch (SQLException e) {
@@ -98,7 +102,7 @@ public class TransactionRepositoryImpl implements TransactionRepository{
     public void updateTransaction(Transaction transaction) {
         try (PreparedStatement statement = DatabaseConnection
                 .getConnection()
-                .prepareStatement("UPDATE transactions SET transaction_type = ? WHERE transaction_id = ?")) {
+                .prepareStatement("UPDATE transactions SET transaction_status = ? WHERE transaction_id = ?")) {
             statement.setString(1, transaction.getStatus().toString());
             statement.setInt(2, transaction.getTransactionId());
             int row = statement.executeUpdate();

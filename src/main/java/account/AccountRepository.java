@@ -168,7 +168,7 @@ public class AccountRepository {
 
     protected boolean existsByAccountId(int id) {
         boolean exists = false;
-        try (PreparedStatement statement = connection.prepareStatement("SELECT COUNT(1) FROM accounts WHERE account_id = ?")) {
+        try (PreparedStatement statement = connection.prepareStatement("SELECT COUNT(1) FROM accounts WHERE account_id=?")) {
             statement.setInt(1, id);
             try (ResultSet rs = statement.executeQuery()) {
                 rs.next();
