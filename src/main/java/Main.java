@@ -226,6 +226,15 @@ public class Main {
                                 4) Make Payment (Credit)
                                 """);
                                 input = scanner.nextInt();
+                                try {
+                                    List<Account> accounts = accountService.getAllAccountsByUserId(user.getUserId());
+                                    for (Account account : accounts) {
+                                        System.out.println(account);
+                                    }
+                                } catch (RuntimeException e) {
+                                    System.out.println(e.getMessage());
+                                    e.printStackTrace();
+                                }
                                 switch (input) {
                                     case 1:
                                         transaction.setTransactionType(TransactionType.DEPOSIT);
