@@ -24,7 +24,8 @@ public class AccountRepository {
         try (PreparedStatement statement = connection.prepareStatement("INSERT INTO accounts(user_id, balance, account_type, interest_rate, minimum_payment, credit_limit) VALUES(?,?,?,?,?,?)")) {
             statement.setInt(1, account.getUserId());
             statement.setDouble(2, account.getBalance());
-            statement.setString(3, account.getAccountType().toString());statement.setDouble(4, account.getInterestRate());
+            statement.setString(3, account.getAccountType().toString());
+            statement.setDouble(4, account.getInterestRate());
             if (account instanceof CreditAccount) {
                 statement.setDouble(5, ((CreditAccount)account).getMinimumPayment());
                 statement.setDouble(6, ((CreditAccount)account).getCreditLimit());
