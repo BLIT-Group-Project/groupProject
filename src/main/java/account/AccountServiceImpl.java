@@ -116,6 +116,11 @@ public class AccountServiceImpl implements AccountService{
         return account.getCreditLimit();
     }
 
+    @Override
+    public void setCreditLimit(CreditAccount account, double amount) {
+        account.setCreditLimit(amount);
+    }
+
     @Override 
     public double getMinimumPayment(CreditAccount account) {
         if (account instanceof CreditAccount) {

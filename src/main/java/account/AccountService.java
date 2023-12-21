@@ -24,6 +24,7 @@ public interface AccountService {
     double deposit(Account account, double amount);
     double withdraw(Account account, double amount);
     double getCreditLimit(CreditAccount account);
+    void setCreditLimit(CreditAccount account, double amount);
     double getMinimumPayment(CreditAccount account);
     double makePayment(CreditAccount account, double amount);
     CreditTransaction charge(CreditAccount account, double amount);
