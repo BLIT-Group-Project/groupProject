@@ -1,7 +1,7 @@
 package transaction.constants;
 
 public enum TransactionType {
-    DEPOSIT("Deposit"), WITHDRAW("Withdraw"), CHARGE("Charge"), MAKE_PAYMENT("Make Payment");
+    DEPOSIT("Deposit"), WITHDRAW("Withdraw"), CHARGE("Charge"), MAKE_PAYMENT("Make_Payment");
 
     private String value;
 
