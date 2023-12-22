@@ -1,15 +1,10 @@
 package transaction;
 
 import account.*;
-import account.constants.AccountType;
 import transaction.constants.TransactionResponse;
 import transaction.constants.TransactionType;
-import user.UserRepository;
-import user.UserRepositoryImpl;
 
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 public class TransactionServiceImpl implements TransactionServices {
     private final TransactionRepository transactionRepository;
@@ -26,7 +21,7 @@ public class TransactionServiceImpl implements TransactionServices {
         int tId = transactionRepository.insertTransaction(transaction);
         Thread transactionProcessing = new Thread(() -> {
             try{
-                Thread.sleep(1 * 60 * 1000);
+                Thread.sleep(60 * 1000);
             }
             catch (InterruptedException e) {
                 System.out.println(e.getMessage());
