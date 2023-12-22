@@ -32,7 +32,9 @@ public class TransactionServiceImpl implements TransactionServices {
                 System.out.println(e.getMessage());
                 e.printStackTrace();
             }
-            updateTransaction(tId);
+            if(tId > 0) {
+                updateTransaction(tId);
+            }
         });
         transactionProcessing.setDaemon(true);
         transactionProcessing.start();
