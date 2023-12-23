@@ -2,8 +2,10 @@ package account;
 
 import java.util.Calendar;
 import java.util.List;
+import java.util.Optional;
 
 import transaction.constants.TransactionResponse;
+import account.exceptions.AccountCreationException;
 import account.exceptions.AccountMismatchException;
 import account.exceptions.AccountNotFoundException;;
 
@@ -38,9 +40,9 @@ public class AccountServiceImpl implements AccountService{
     @Override
     public Account createAccount(Account account) {
         if (account.getAccountType().matches("(?i)savings|checking")) {
-            return repo.save(account);
+            return violenlyShakeOptionalAccount(repo.save(account));
         } else {
-            return repo.save(new CreditAccount(account));
+            return violenlyShakeOptionalAccount(repo.save(new CreditAccount(account)));
         }
     }
 
@@ -169,6 +171,15 @@ public class AccountServiceImpl implements AccountService{
     private Account violenlyShakeOptionalAccount(int accountId) {
         return repo.getByAccountId(accountId)
             .orElseThrow(() -> new AccountNotFoundException());
+    }
+
+    // this should only be called by the createAccount method
+    private Account violenlyShakeOptionalAccount(Optional<Account> account) {
+        if (account.isPresent()) {
+            return account.get();
+        } else {
+            throw new AccountCreationException();
+        }
     }
     
 }

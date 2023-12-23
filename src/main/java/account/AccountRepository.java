@@ -4,6 +4,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -20,8 +21,9 @@ public class AccountRepository {
     } 
 
     // Look on my kludge, ye mighty, and despair
-    protected Account save(Account account) {
-        try (PreparedStatement statement = connection.prepareStatement("INSERT INTO accounts(user_id, balance, account_type, interest_rate, minimum_payment, credit_limit) VALUES(?,?,?,?,?,?)")) {
+    protected Optional<Account> save(Account account) {
+        int newid = 0;
+        try (PreparedStatement statement = connection.prepareStatement("INSERT INTO accounts(user_id, balance, account_type, interest_rate, minimum_payment, credit_limit) VALUES(?,?,?,?,?,?)", Statement.RETURN_GENERATED_KEYS)) {
             statement.setInt(1, account.getUserId());
             statement.setDouble(2, account.getBalance());
             statement.setString(3, account.getAccountType().toString());
@@ -33,11 +35,17 @@ public class AccountRepository {
                 statement.setDouble(5, 0.00);
                 statement.setDouble(6, 0.00);
             }
-            statement.executeUpdate();
+            int row = statement.executeUpdate();
+            if (row > 0)
+            try (ResultSet rs = statement.getGeneratedKeys()) {
+                rs.next();
+                newid = rs.getInt(row);
+                
+            }
         } catch (SQLException ex) {
             System.out.println(ex.getMessage());
         }
-        return getAllByUserId(account.getUserId()).get(getAllByUserId(account.getUserId()).size() - 1);
+        return getByAccountId(newid);
     }
 
     protected Optional<Account> getByAccountId(int id) {
